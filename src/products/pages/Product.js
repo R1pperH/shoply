@@ -1,17 +1,9 @@
-import { useState } from "react";
-import Product from "./products/pages/Product";
-import ProductModal from "./products/pages/ProductModal";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useParams,
-} from "react-router-dom";
+import React from "react";
+import ProductModal from "./ProductModal";
 
-import MainNavigation from "./shared/navigation/MainNavigation";
-import Cart from "./cart/cart";
-import AuthContext from "./hooks/auth-hook";
+import { Link } from "react-router-dom";
 
+import ProductItem from "../components/ProductItem";
 const data = [
   {
     id: "p1",
@@ -86,50 +78,6 @@ const data = [
   },
 ];
 
-const cart = [];
-
-function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
-  const [cartItems, setCartItems] = useState([]);
-
-  function authHandler() {
-    setLoggedIn((prevValue) => !prevValue);
-  }
-
-  function addCart(id) {
-    const existingItemIndex = cartItems.findIndex((item) => item.id === id);
-
-    if (existingItemIndex > -1) {
-      // If item exists, update quantity (you'll need to implement this logic)
-      // For now, let's just prevent duplicates:
-      return;
-    } else {
-      const newItem = data.find((prod) => prod.id === id);
-      setCartItems((prevItems) => [...prevItems, newItem]);
-    }
-  }
-
-  return (
-    <>
-      <AuthContext.Provider
-        value={{
-          isLoggedIn: loggedIn,
-          login: authHandler,
-          logout: authHandler,
-          cart: addCart,
-        }}
-      >
-        <Router>
-          <MainNavigation />
-          <Routes>
-            <Route index path="/" element={<Product />} />
-            <Route path="/products/:id" element={<ProductModal />} />
-            <Route path="/cart" element={<Cart cart={cartItems} />} />
-          </Routes>
-        </Router>
-      </AuthContext.Provider>
-    </>
-  );
+export default function Product() {
+  return <ProductItem items={data} />;
 }
-
-export default App;
