@@ -8,8 +8,8 @@ import AuthContext from "../../hooks/auth-hook";
 export default function ProductItem({ items }) {
   const auth = useContext(AuthContext);
   const products = items.map((prod) => (
-    <div>
-      <Link to={`/products/${prod.id}`}>
+    <div key={prod.id}>
+      <Link to={`/products/${prod._id}`}>
         <img src={prod.image} alt={prod.name} />
       </Link>
       <h3>{prod.name}</h3>
@@ -21,5 +21,5 @@ export default function ProductItem({ items }) {
     </div>
   ));
 
-  return <>{products}</>;
+  return <>{products.length > 0 ? products : <p>Loading products...</p>}</>;
 }
