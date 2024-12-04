@@ -10,7 +10,7 @@ export default function MainNavigation() {
     <>
       <NavLink to="/">Home</NavLink>
       {auth.isLoggedIn && <NavLink to="/cart">Cart</NavLink>}
-      {auth.isLoggedIn && <NavLink to="/login">Login</NavLink>}
+      <NavLink to="/login">Login</NavLink>
       <NavLink to="/signup">signup</NavLink>
     </>
   );

@@ -11,6 +11,7 @@ import {
 import MainNavigation from "./shared/navigation/MainNavigation";
 import Cart from "./cart/cart";
 import AuthContext from "./hooks/auth-hook";
+import SignUp from "./forms/signup";
 
 const data = [
   {
@@ -89,11 +90,27 @@ const data = [
 const cart = [];
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [token, setToken] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  function authHandler() {
-    setLoggedIn((prevValue) => !prevValue);
+  function authHandler(token) {
+    setToken(token);
+  }
+
+  function formHandler(e) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    console.log(formData.password);
   }
 
   function addCart(id) {
@@ -113,7 +130,7 @@ function App() {
     <>
       <AuthContext.Provider
         value={{
-          isLoggedIn: loggedIn,
+          isLoggedIn: !!token,
           login: authHandler,
           logout: authHandler,
           cart: addCart,
@@ -125,6 +142,10 @@ function App() {
             <Route index path="/" element={<Product />} />
             <Route path="/products/:id" element={<ProductModal />} />
             <Route path="/cart" element={<Cart cart={cartItems} />} />
+            <Route
+              path="/signup"
+              element={<SignUp data={formData} change={formHandler} />}
+            />
           </Routes>
         </Router>
       </AuthContext.Provider>
