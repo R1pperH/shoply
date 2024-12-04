@@ -12,6 +12,7 @@ import MainNavigation from "./shared/navigation/MainNavigation";
 import Cart from "./cart/cart";
 import AuthContext from "./hooks/auth-hook";
 import SignUp from "./forms/signup";
+import Login from "./forms/login";
 
 const data = [
   {
@@ -145,6 +146,10 @@ function App() {
             <Route
               path="/signup"
               element={<SignUp data={formData} change={formHandler} />}
+            />
+            <Route
+              path="/login"
+              element={<Login data={formData} change={formHandler} />}
             />
           </Routes>
         </Router>

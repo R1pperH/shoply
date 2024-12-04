@@ -11,7 +11,11 @@ export default function MainNavigation() {
       <NavLink to="/">Home</NavLink>
       {auth.isLoggedIn && <NavLink to="/cart">Cart</NavLink>}
       <NavLink to="/login">Login</NavLink>
-      <NavLink to="/signup">signup</NavLink>
+      {auth.isLoggedIn ? (
+        <NavLink to="/logut">Logout</NavLink>
+      ) : (
+        <NavLink to="/signup">signup</NavLink>
+      )}
     </>
   );
 }
