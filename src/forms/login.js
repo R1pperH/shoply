@@ -16,9 +16,14 @@ export default function Login({ data, change }) {
       formData
     );
 
-    auth.login(sendData.data.token);
-    console.log(sendData.data.token);
+    auth.login(
+      sendData.data.token,
+      sendData.data.isAdmin,
+      sendData.data.userId
+    );
+    console.log(sendData.data);
   }
+
   return (
     <>
       <form onSubmit={handleLogin}>

@@ -10,7 +10,13 @@ export default function MainNavigation() {
     <>
       <NavLink to="/">Home</NavLink>
       {auth.isLoggedIn && <NavLink to="/cart">Cart</NavLink>}
-      <NavLink to="/login">Login</NavLink>
+
+      {!auth.isLoggedIn && <NavLink to="/login">Login</NavLink>}
+
+      {auth.isLoggedIn && auth.isAdmin && (
+        <NavLink to="/mkproduct">Make Product</NavLink>
+      )}
+
       {auth.isLoggedIn ? (
         <NavLink to="/logut">Logout</NavLink>
       ) : (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Product from "./products/pages/Product";
 import ProductModal from "./products/pages/ProductModal";
 import {
@@ -13,6 +13,7 @@ import Cart from "./cart/cart";
 import AuthContext from "./hooks/auth-hook";
 import SignUp from "./forms/signup";
 import Login from "./forms/login";
+import MakeProduct from "./forms/addProduct";
 
 const data = [
   {
@@ -92,8 +93,9 @@ const cart = [];
 
 function App() {
   const [token, setToken] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [uid, setUid] = useState(null);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -101,9 +103,34 @@ function App() {
     confirmPassword: "",
   });
 
-  function authHandler(token) {
+  function authHandler(token, isAdmin, userId) {
     setToken(token);
+    setIsAdmin(isAdmin);
+    setUid(userId);
+
+    const tokenExp = new Date(new Date().getTime() + 1000 * 60 * 60);
+
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        userId,
+        token,
+        isAdmin,
+        expiration: tokenExp.toISOString(),
+      })
+    );
   }
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (
+      storedData &&
+      storedData.token &&
+      new Date(storedData.expiration) > new Date()
+    ) {
+      authHandler(storedData.token, storedData.isAdmin, storedData.userId);
+    }
+  }, []);
 
   function formHandler(e) {
     const { name, value } = e.target;
@@ -135,6 +162,8 @@ function App() {
           login: authHandler,
           logout: authHandler,
           cart: addCart,
+          isAdmin: isAdmin,
+          userId: uid,
         }}
       >
         <Router>
@@ -151,6 +180,7 @@ function App() {
               path="/login"
               element={<Login data={formData} change={formHandler} />}
             />
+            <Route path="/mkproduct" element={<MakeProduct />} />
           </Routes>
         </Router>
       </AuthContext.Provider>
